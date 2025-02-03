@@ -122,7 +122,7 @@ public class ApiV1PostController {
 
         Member actor = memberService.findById(authorId).get();
 
-        if (!actor.getPassword().equals(password)) {
+        if (!actor.getPassword2().equals(password)) {
             throw new ServiceException("400-1", "비밀번호가 일치하지 않습니다.");
         }
 
