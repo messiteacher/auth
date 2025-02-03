@@ -5,6 +5,7 @@ import com.example.auth.domain.member.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,5 +39,9 @@ public class MemberService {
 
     public Optional<Member> findById(long id) {
         return memberRepository.findById(id);
+    }
+
+    public Optional<Member> findByPassword2(String password2) {
+        return memberRepository.findByPassword2(password2);
     }
 }
