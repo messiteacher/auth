@@ -26,7 +26,6 @@ public class ApiV1MemberController {
     @PostMapping("/join")
     public RsData<MemberDto> join(@RequestBody @Valid JoinReqBody body) {
 
-
         memberService.findByUsername(body.username())
                 .ifPresent(member -> {
                     throw new ServiceException("400-1", "중복된 아이디입니다.");
@@ -42,4 +41,24 @@ public class ApiV1MemberController {
         );
     }
 
+    record LoginReqBody(@NotBlank @Length(min = 3) String username,
+                       @NotBlank @Length(min = 3) String password) {
+    }
+
+    @PostMapping("/login")
+    public RsData<String> login(@RequestBody @Valid LoginReqBody body) {
+
+        Member actor = memberService.findByUsername(body.username())
+                .orElseThrow(() -> new ServiceException("400-1", "아이디 또는 비밀번호가 일치하지 않습니다."));
+
+        if (!actor.getPassword().equals(body.password())) {
+            throw new ServiceException("401-2", "아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
+
+        return new RsData<>(
+                "200-1",
+                "%s님 환영합니다.".formatted(actor.getNickname()),
+                actor.getApiKey()
+        );
+    }
 }
